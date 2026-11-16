@@ -1,0 +1,17 @@
+<input type="file" id="f" accept="image/*"><br><button id="b">copy</button><span id="m"></span>
+<canvas id="c" width="480" height="360" style="display:none"></canvas>
+<textarea id="t" style="position:absolute;left:-9999px"></textarea>
+<script>
+const C=c.getContext('2d'),H=[...Array(256)].map((_,i)=>i.toString(16).padStart(2,'0'));
+f.onchange=e=>{
+ const i=new Image;
+ i.onload=()=>{
+  C.drawImage(i,0,0,480,360);
+  const d=C.getImageData(0,0,480,360).data,a=[];
+  for(let x=0;x<d.length;x+=4)a.push(H[d[x]],H[d[x+1]],H[d[x+2]]);
+  t.value=a.join('');
+ };
+ i.src=URL.createObjectURL(e.target.files[0]);
+};
+b.onclick=()=>{t.select();document.execCommand('copy');m.textContent='コピー完了'};
+</script>
